@@ -37,28 +37,29 @@ def extract_features(url):
 # -------------------------------------------------------------
 #            MODEL + SCALER LOADING (CACHED)
 # -------------------------------------------------------------
-
 @st.cache_resource
 def load_model_and_scaler():
-    """Download and load the model + scaler once, then cache."""
+    """Load model from HuggingFace and scaler locally from the repo."""
 
     model_url = "https://huggingface.co/Nayds004/url_prediction_model/resolve/main/ensemble_model.joblib"
-    scaler_url = "scaler.joblib"
+    
+    # Local scaler path (same directory as the app)
+    scaler_path = "scaler.joblib"
 
-    model_bytes = requests.get(model_url).content
-    scaler_bytes = requests.get(scaler_url).content
+    # Download model if not already cached locally
+    if not os.path.exists("ensemble_model.joblib"):
+        model_bytes = requests.get(model_url).content
+        with open("ensemble_model.joblib", "wb") as f:
+            f.write(model_bytes)
 
-    with open("ensemble_model.joblib", "wb") as f:
-        f.write(model_bytes)
-    with open("scaler.joblib", "wb") as f:
-        f.write(scaler_bytes)
-
+    # Load model
     model = joblib.load("ensemble_model.joblib")
-    scaler = joblib.load("scaler.joblib")
+
+    # Load scaler locally (NO requests.get!)
+    scaler = joblib.load(scaler_path)
 
     return model, scaler
 
-model, scaler = load_model_and_scaler()
 
 # -------------------------------------------------------------
 #            URL VALIDATION
