@@ -134,6 +134,8 @@ def prediction_page():
             time.sleep(1)
 
             features_df = extract_features(url_input)
+            # loading the model and scaler files
+            model, scaler = load_model_and_scaler()
             scaled = scaler.transform(features_df)
             prediction = model.predict(scaled)[0]
 
