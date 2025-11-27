@@ -77,10 +77,10 @@ def prediction_page():
 
     if st.button("Analyze URL", type="primary"):
 
-        if not is_valid_url(url_input):
-            # st.error("❌ Invalid URL format. Please enter a complete URL starting with http:// or https://.")
-            pass
-            return
+        # if not is_valid_url(url_input):
+        #     st.error("❌ Invalid URL format. Please enter a complete URL starting with http:// or https://.")
+        #     pass
+        #     return
 
         with st.spinner("Sending URL to Space API for prediction..."):
             time.sleep(1)
